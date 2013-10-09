@@ -13,10 +13,12 @@ class SublimeRsyncer(sublime_plugin.EventListener):
         if folders:
             for folder in folders:
                 if current_file[:len(folder['localPath'])] == folder['localPath']:
-
-                    # spawn a thread so non-blocking
-                    thread = Rsync(folder['localPath'], folder['remote'], folder['exclude'], folder['deleteAfter'])
-                    thread.start()
+                    if folder['buildOnSave'] == 1:
+                        # spawn a thread so non-blocking
+                        thread = Rsync(folder['localPath'], folder['remote'], folder['exclude'], folder['deleteAfter'])
+                        thread.start()
+                    else:
+                        return
 
 
 class Rsync(threading.Thread):
